@@ -37,8 +37,9 @@ cd ../../
 # Force numpy <2
 pip install numpy==1.26.3
 
-# Ensure the version of pycolmap is 3.10.0
-pip install pycolmap==3.10.0 pyceres
+# Ensure the version of pycolmap is 3.10.0 and pyceres is 2.3
+# (pycolmap 3.10.0 needs pyceres 2.3 otherwise it will throw an error during bundle adjustment)
+pip install pycolmap==3.10.0 pyceres==2.3
 
 # (Optional) Install poselib 
 pip install poselib==2.0.2
