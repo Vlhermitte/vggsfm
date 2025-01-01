@@ -53,9 +53,12 @@ def demo_fn(cfg: DictConfig):
         sequence_name=seq_name, return_path=True
     )
 
-    output_dir = batch[
-        "scene_dir"
-    ]  # which is also cfg.SCENE_DIR for DemoLoader
+    if cfg.OUTPUT_DIR is not None:
+        output_dir = cfg.OUTPUT_DIR
+    else:
+        output_dir = batch[
+            "scene_dir"
+        ]  # which is also cfg.SCENE_DIR for DemoLoader
 
     images = batch["image"]
     masks = batch["masks"] if batch["masks"] is not None else None
@@ -63,7 +66,7 @@ def demo_fn(cfg: DictConfig):
         batch["crop_params"] if batch["crop_params"] is not None else None
     )
 
-    # Cache the original images for visualization, so that we don't need to re-load many times
+    # Cache the original data for visualization, so that we don't need to re-load many times
     original_images = batch["original_images"]
 
     # Run VGGSfM

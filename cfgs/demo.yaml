@@ -42,6 +42,7 @@ shared_camera: False
 
 save_to_disk: True
 SCENE_DIR: examples/kitchen
+OUTPUT_DIR: examples/kitchen
 
 resume_ckpt:  ckpt/vggsfm_v2_0_0.bin
 auto_download_ckpt: True
