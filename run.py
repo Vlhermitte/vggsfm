@@ -4,23 +4,19 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-
 import torch
 import hydra
 from omegaconf import DictConfig, OmegaConf
 
-# from vggsfm.runners.runner import VGGSfMRunner
-from vggsfm.runners.video_runner import VideoRunner
+from vggsfm.runners.runner import VGGSfMRunner
 from vggsfm.datasets.demo_loader import DemoLoader
 from vggsfm.utils.utils import seed_all_random_engines
 
 
-@hydra.main(config_path="cfgs/", config_name="video_demo")
+@hydra.main(config_path="cfgs/", config_name="ETH3D")
 def demo_fn(cfg: DictConfig):
     """
-    Main function to run the VGGSfM demo. VideoRunner is the main controller.
-
-    VideoRunner assumes a sequential input of images.
+    Main function to run the VGGSfM demo. VGGSfMRunner is the main controller.
     """
 
     OmegaConf.set_struct(cfg, False)
@@ -37,7 +33,7 @@ def demo_fn(cfg: DictConfig):
     seed_all_random_engines(cfg.seed)
 
     # Initialize VGGSfM Runner
-    vggsfm_runner = VideoRunner(cfg)
+    vggsfm_runner = VGGSfMRunner(cfg)
 
     # Load Data
     test_dataset = DemoLoader(
@@ -56,12 +52,7 @@ def demo_fn(cfg: DictConfig):
         sequence_name=seq_name, return_path=True
     )
 
-    if cfg.OUTPUT_DIR is not None:
-        output_dir = cfg.OUTPUT_DIR
-    else:
-        output_dir = batch[
-            "scene_dir"
-        ]  # which is also cfg.SCENE_DIR for DemoLoader
+    output_dir = cfg.OUTPUT_DIR
 
     images = batch["image"]
     masks = batch["masks"] if batch["masks"] is not None else None
@@ -69,7 +60,7 @@ def demo_fn(cfg: DictConfig):
         batch["crop_params"] if batch["crop_params"] is not None else None
     )
 
-    # Cache the original images for visualization, so that we don't need to re-load many times
+    # Cache the original data for visualization, so that we don't need to re-load many times
     original_images = batch["original_images"]
 
     # Run VGGSfM
@@ -82,16 +73,14 @@ def demo_fn(cfg: DictConfig):
         crop_params=crop_params,
         seq_name=seq_name,
         output_dir=output_dir,
-        init_window_size=cfg.init_window_size,
-        window_size=cfg.window_size,
-        joint_BA_interval=cfg.joint_BA_interval,
     )
 
-    print("Video Demo Finished Successfully")
+    print("Demo Finished Successfully")
 
     return True
 
 
 if __name__ == "__main__":
+    torch.cuda.empty_cache()
     with torch.no_grad():
         demo_fn()
