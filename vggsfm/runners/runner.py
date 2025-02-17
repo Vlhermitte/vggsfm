@@ -426,7 +426,6 @@ class VGGSfMRunner:
                 query_frame_indexes,
                 self.cfg.fine_tracking,
                 bound_bboxes,
-                max_points_num=self.cfg.max_points_num
             )
 
             # Complement non-visible frames if enabled
@@ -693,7 +692,6 @@ class VGGSfMRunner:
                 fine_tracking=False,
                 bound_bboxes=bound_bboxes[:, neighbor_start:neighbor_end],
                 query_points_dict={rel_frame_idx: grid_points[None]},
-                max_points_num=self.cfg.max_points_num
             )
 
             extra_params_neighbor = (
@@ -1078,7 +1076,8 @@ def predict_tracks(
     fine_tracking,
     bound_bboxes=None,
     query_points_dict=None,
-    max_points_num=163840,
+    # max_points_num=163840,
+    max_points_num=163840/2, # 16 GB GPU
 ):
     """
     Predict tracks for the given images and masks.
@@ -1261,7 +1260,6 @@ def comple_nonvis_frames(
             non_vis_query_list,
             fine_tracking,
             bound_bboxes,
-            max_points_num=self.cfg.max_points_num
         )
 
         # concat predictions
