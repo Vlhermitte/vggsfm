@@ -1077,7 +1077,7 @@ def predict_tracks(
     bound_bboxes=None,
     query_points_dict=None,
     # max_points_num=163840,
-    max_points_num=163840//2, # 16 GB GPU
+    max_points_num=163840//4, # 16 GB GPU
 ):
     """
     Predict tracks for the given images and masks.
