@@ -19,14 +19,8 @@ conda create -n $ENV_NAME python=$PYTHON_VERSION
 conda activate $ENV_NAME
 
 # Install PyTorch, torchvision, and PyTorch3D using conda
-# if macos
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    conda install pytorch=$PYTORCH_VERSION torchvision -c pytorch
-    MACOSX_DEPLOYMENT_TARGET=15.1 CC=clang CXX=clang++ pip install "git+https://github.com/facebookresearch/pytorch3d.git"
-else
-    conda install pytorch=$PYTORCH_VERSION torchvision pytorch-cuda=$CUDA_VERSION -c pytorch -c nvidia
-    conda install pytorch3d=0.7.5 -c pytorch3d
-fi
+conda install pytorch=$PYTORCH_VERSION torchvision pytorch-cuda=$CUDA_VERSION -c pytorch -c nvidia
+conda install pytorch3d=0.7.5 -c pytorch3d
 conda install -c fvcore -c iopath -c conda-forge fvcore iopath
 
 
