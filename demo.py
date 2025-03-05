@@ -9,7 +9,7 @@ import torch
 import hydra
 from omegaconf import DictConfig, OmegaConf
 import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
+warnings.filterwarnings("ignore")
 
 from vggsfm.runners.runner import VGGSfMRunner
 from vggsfm.datasets.demo_loader import DemoLoader
