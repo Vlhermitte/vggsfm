@@ -683,8 +683,8 @@ def triangulate_tracks(
     min_tri_angle=1.5,
     track_vis=None,
     track_score=None,
-    # max_tri_points_num=819200, # FOR 32GB GPU
-    max_tri_points_num=819200//10,  # FOR 16GB GPU
+    max_tri_points_num=819200, # FOR 32GB GPU
+    # max_tri_points_num=819200//10,  # FOR 16GB GPU
 ):
     """
     Triangulate Tracks. If necessary, process tracks in smaller chunks to avoid memory issues during triangulation.
