@@ -902,7 +902,7 @@ class VGGSfMRunner:
         if output_dir is None:
             output_dir = os.path.join("output", seq_name)
 
-        sfm_output_dir = os.path.join(output_dir, "sparse")
+        sfm_output_dir = os.path.join(output_dir) # os.path.join(output_dir, "sparse")
         print("-" * 50)
         print(
             f"The output has been saved in COLMAP style at: {sfm_output_dir} "
