@@ -1,4 +1,4 @@
-# Use an NVIDIA CUDA base image (with devel for building/compiling)
+# Use an NVIDIA CUDA base image
 FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 
 # Use bash for all RUN commands so that conda activation works properly
