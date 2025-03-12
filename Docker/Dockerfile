@@ -1,13 +1,18 @@
 # Use an NVIDIA CUDA base image (with devel for building/compiling)
-FROM nvidia/cuda:12.1.0-devel-ubuntu20.04
+FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
 
 # Use bash for all RUN commands so that conda activation works properly
 SHELL ["/bin/bash", "-c"]
 
+# Set noninteractive mode for apt-get to avoid tzdata prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     wget \
-    git
+    git \
+    libgl1-mesa-glx \
+    libglib2.0.0
 
 # Install Miniconda
 ENV CONDA_DIR=/opt/conda
@@ -39,7 +44,7 @@ ENV PATH=$CONDA_DIR/envs/$ENV_NAME/bin:$PATH
 RUN source $CONDA_DIR/etc/profile.d/conda.sh && \
     conda activate $ENV_NAME && \
     conda install pytorch=$PYTORCH_VERSION torchvision pytorch-cuda=$CUDA_VERSION -c pytorch -c nvidia -y && \
-    conda install pytorch3d=0.7.5 -c pytorch3d -y && \
+    # conda install pytorch3d=0.7.5 -c pytorch3d -y && \
     conda install -c fvcore -c iopath -c conda-forge fvcore iopath -y
 
 RUN source $CONDA_DIR/etc/profile.d/conda.sh && conda activate $ENV_NAME && \
