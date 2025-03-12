@@ -4,13 +4,13 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
-# This Script Assumes Python 3.11, CUDA 12.1
+# This Script Assumes Python 3.10, CUDA 12.1
 
 conda deactivate
 
 # Set environment variables
 export ENV_NAME=vggsfm_tmp
-export PYTHON_VERSION=3.11
+export PYTHON_VERSION=3.10
 export PYTORCH_VERSION=2.1.0
 export CUDA_VERSION=12.1
 
