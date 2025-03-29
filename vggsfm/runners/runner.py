@@ -81,7 +81,14 @@ class VGGSfMRunner:
 
         self.cfg = cfg
 
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        # self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = "cpu"
+        if torch.cuda.is_available():
+            print("CUDA is available")
+            self.device = torch.device("cuda")
+        if torch.backends.mps.is_available():
+            print("MPS is available")
+            self.device = torch.device("mps")
 
         self.build_vggsfm_model()
         self.camera_predictor = self.vggsfm_model.camera_predictor
@@ -831,6 +838,19 @@ class VGGSfMRunner:
             out_fname_with_bin = name_wo_extension + ".bin"
             write_array(depth_map, out_fname_with_bin)
 
+    def save_dense_reconstruct(self, dense_reconstruction, output_dir):
+        """
+        Save the dense reconstruction results in COLMAP format.
+
+        Args:
+            dense_reconstruction (dict): Dense reconstruction results including camera parameters and 3D points.
+            output_dir (str): Directory to save the reconstruction.
+        """
+        # Export prediction as .ply format
+        print(dense_reconstruction)
+
+
+
     def make_reprojection_video(
         self, predictions, video_size, image_paths, original_images
     ):
@@ -1382,7 +1402,8 @@ def get_query_points(
             raise NotImplementedError(
                 f"query method {method} is not supprted now"
             )
-        extractor = extractor.cuda().eval()
+        # extractor = extractor.cuda().eval()
+        extractor = extractor.eval()
         invalid_mask = None
 
         if bound_bbox is not None:
