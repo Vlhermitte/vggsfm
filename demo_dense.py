@@ -4,16 +4,20 @@
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
 
+
 import torch
 import hydra
+import pycolmap
 from omegaconf import DictConfig, OmegaConf
+import warnings
+warnings.filterwarnings("ignore")
 
 from vggsfm.runners.runner import VGGSfMRunner
 from vggsfm.datasets.demo_loader import DemoLoader
 from vggsfm.utils.utils import seed_all_random_engines
 
 
-@hydra.main(config_path="cfgs/", config_name="ETH3D")
+@hydra.main(config_path="cfgs/", config_name="demo_dense")
 def demo_fn(cfg: DictConfig):
     """
     Main function to run the VGGSfM demo. VGGSfMRunner is the main controller.
@@ -52,7 +56,12 @@ def demo_fn(cfg: DictConfig):
         sequence_name=seq_name, return_path=True
     )
 
-    output_dir = cfg.OUTPUT_DIR
+    if cfg.OUTPUT_DIR is not None:
+        output_dir = cfg.OUTPUT_DIR
+    else:
+        output_dir = batch[
+            "scene_dir"
+        ]  # which is also cfg.SCENE_DIR for DemoLoader
 
     images = batch["image"]
     masks = batch["masks"] if batch["masks"] is not None else None
@@ -63,17 +72,17 @@ def demo_fn(cfg: DictConfig):
     # Cache the original data for visualization, so that we don't need to re-load many times
     original_images = batch["original_images"]
 
-    # Run VGGSfM
-    # Both visualization and output writing are performed inside VGGSfMRunner
-    predictions = vggsfm_runner.run(
-        images,
-        masks=masks,
-        original_images=original_images,
-        image_paths=image_paths,
-        crop_params=crop_params,
-        seq_name=seq_name,
-        output_dir=output_dir,
-    )
+    sparse_reconstruction = pycolmap.Reconstruction(output_dir)
+
+    predictions = dict()
+    predictions["reconstruction"] = sparse_reconstruction
+
+    prediction  = vggsfm_runner.extract_sparse_depth_and_point_from_reconstruction(predictions)
+
+    # Run dense reconstruction
+    predictions = vggsfm_runner.dense_reconstruct(
+                    predictions, image_paths, original_images
+                )
 
     print("Demo Finished Successfully")
 
@@ -81,6 +90,5 @@ def demo_fn(cfg: DictConfig):
 
 
 if __name__ == "__main__":
-    torch.cuda.empty_cache()
     with torch.no_grad():
         demo_fn()
