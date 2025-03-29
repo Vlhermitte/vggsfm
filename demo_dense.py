@@ -77,7 +77,7 @@ def demo_fn(cfg: DictConfig):
     predictions = dict()
     predictions["reconstruction"] = sparse_reconstruction
 
-    prediction  = vggsfm_runner.extract_sparse_depth_and_point_from_reconstruction(predictions)
+    predictions  = vggsfm_runner.extract_sparse_depth_and_point_from_reconstruction(predictions)
 
     # Run dense reconstruction
     predictions = vggsfm_runner.dense_reconstruct(
@@ -85,6 +85,7 @@ def demo_fn(cfg: DictConfig):
                 )
 
     vggsfm_runner.save_dense_depth_maps(predictions["depth_dict"], output_dir)
+    vggsfm_runner.save_dense_reconstruct(predictions["unproj_dense_points3D"], output_dir)
 
     print("Demo Finished Successfully")
 
