@@ -84,6 +84,8 @@ def demo_fn(cfg: DictConfig):
                     predictions, image_paths, original_images
                 )
 
+    vggsfm_runner.save_dense_depth_maps(predictions["depth_dict"], output_dir)
+
     print("Demo Finished Successfully")
 
     return True
