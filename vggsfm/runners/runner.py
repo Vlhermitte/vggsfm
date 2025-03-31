@@ -11,6 +11,7 @@ import copy
 import torch
 import pycolmap
 import datetime
+import open3d as o3d
 
 import time
 import numpy as np
@@ -837,19 +838,6 @@ class VGGSfMRunner:
             name_wo_extension = os.path.splitext(depth_map_path)[0]
             out_fname_with_bin = name_wo_extension + ".bin"
             write_array(depth_map, out_fname_with_bin)
-
-    def save_dense_reconstruct(self, dense_reconstruction, output_dir):
-        """
-        Save the dense reconstruction results in COLMAP format.
-
-        Args:
-            dense_reconstruction (dict): Dense reconstruction results including camera parameters and 3D points.
-            output_dir (str): Directory to save the reconstruction.
-        """
-        # Export prediction as .ply format
-        print(dense_reconstruction)
-
-
 
     def make_reprojection_video(
         self, predictions, video_size, image_paths, original_images
