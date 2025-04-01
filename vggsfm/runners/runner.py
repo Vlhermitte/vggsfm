@@ -11,7 +11,6 @@ import copy
 import torch
 import pycolmap
 import datetime
-import open3d as o3d
 
 import time
 import numpy as np
